@@ -28,6 +28,7 @@ unnest_calls <- function(.data, input, drop = TRUE) {
   }
   d <- .unnest_calls(x)
   tbl <- .data[d$line, ]
+  tbl <- tibble::add_column(tbl, pkg = d$pkg)
   tbl <- tibble::add_column(tbl, func = d$func)
   tbl <- tibble::add_column(tbl, args = d$args)
   tbl$line <- d$line
@@ -58,13 +59,15 @@ unnest_calls <- function(.data, input, drop = TRUE) {
     c <- ls_fun_calls(x)
     a <- ls_fun_args(x)
     d <- tibble::tibble(
-      func = unlist(c),
-      args = rep(a, purrr::map_dbl(c, length)),
+      pkg = purrr::map(c, "pkg"),
+      func = purrr::map(c, "func"),
+      args = rep(a, purrr::map_dbl(c, length)/2),
       line = 1
     )
   }
   if (is.name(x)) {
     d <- tibble::tibble(
+      pkg = NA,
       func = as.character(x),
       args = list(character(0)),
       line = 1

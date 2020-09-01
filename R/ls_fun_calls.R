@@ -26,7 +26,7 @@ ls_fun_calls <- function(x) {
       }
     }
     ch <- unlist(lapply(x[-1], ls_fun_calls), use.names = TRUE, recursive = FALSE)
-    r <- list(c(pkg = pkg, fun = fname))
+    r <- list(c(pkg = pkg, func = fname))
     if (is.null(ch)){
       r
     } else {
